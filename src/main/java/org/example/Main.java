@@ -9,7 +9,8 @@ public class Main {
     public static void main(String[] args) {
 
         // bot token used for telling the bot the account to use
-        String token = "MTA2Njk2OTQzODU0MjM2NDcwMg.GbXLjD.QgipQNk0FmitJ_tWOgHM0wZzNOwnZNXfaZAvdw";
+        Token toke = new Token();
+        String token = toke.getToken();
         // the string that creates the bot and logs it in
         DiscordApi api = new DiscordApiBuilder().setToken(token).setAllIntents().login().join();
         //commands TODO: figure out why this command is not listing/working
