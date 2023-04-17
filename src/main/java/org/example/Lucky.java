@@ -1,5 +1,13 @@
 package org.example;
 
-public class Lucky {
-    // dice roll bot commands
+import java.util.Random;
+
+public  class Lucky {
+
+
+
+
+
+
+
 }
