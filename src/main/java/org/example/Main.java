@@ -3,10 +3,12 @@ package org.example;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.Attachment;
+import org.javacord.api.entity.channel.ServerTextChannelBuilder;
 import org.javacord.api.entity.message.MessageFlag;
 import org.javacord.api.entity.permission.PermissionType;
 import org.javacord.api.entity.permission.Role;
 import org.javacord.api.entity.permission.RoleBuilder;
+import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.interaction.*;
 
@@ -53,6 +55,12 @@ public class Main {
 
         //Management Commands
         SlashCommand ManagementStatus = SlashCommand.with("managementstatus","Flips the status of Management Module, Default = False").setDefaultEnabledForPermissions(PermissionType.ADMINISTRATOR).createGlobal(api).join();
+        SlashCommand addTextChannel = SlashCommand.with("addtextchannel","Adds a new text channel with the name passsed ", Arrays.asList(
+                SlashCommandOption.create(SlashCommandOptionType.STRING,"ChannelName","the Name of the text channel ",true)
+        )).setDefaultEnabledForPermissions(PermissionType.ADMINISTRATOR).createGlobal(api).join();
+        SlashCommand addVoiceChannel = SlashCommand.with("addvoicechannel","Adds a new voice channel with the name passsed ", Arrays.asList(
+                SlashCommandOption.create(SlashCommandOptionType.STRING,"ChannelName","the Name of the text channel ",true)
+        )).setDefaultEnabledForPermissions(PermissionType.ADMINISTRATOR).createGlobal(api).join();
 
         //when a command is used return
         api.addSlashCommandCreateListener(event -> {
@@ -131,7 +139,7 @@ public class Main {
 
             if(colorStatus.get() == false){
                 if(interaction.getFullCommandName().equals("color")){
-                    System.out.println(interaction.getUser().getName().toString()+" color command was used with module not enables");
+                    System.out.println(interaction.getUser().getName().toString()+" color command was used with module not enabled");
                     interaction.createImmediateResponder().setContent("Color module not enabled please contact an adminstrator to fix the issue").respond();
                 }
             }else{
@@ -156,9 +164,29 @@ public class Main {
             }
 
             if(managemntStatus.get() == false){
-                // that says the module is disabled
+                if(interaction.getFullCommandName().equals("addtextchannel")){
+                    System.out.println(interaction.getUser().getName().toString()+" add text channel command was used with module not enabled");
+                    interaction.createImmediateResponder().setContent("Management module not enabled please contact an adminstrator to fix the issue").respond();
+                }
+                if(interaction.getFullCommandName().equals("addvoicechannel")){
+                    System.out.println(interaction.getUser().getName().toString()+" add voice channel command was used with module not enabled");
+                    interaction.createImmediateResponder().setContent("Management module not enabled please contact an adminstrator to fix the issue").respond();
+                }
             }else{
-                //code that changes colors
+                if(interaction.getFullCommandName().equals("addtextchannel")){
+                    System.out.println(interaction.getUser().getName().toString()+" used add text channel");
+                    Server server = interaction.getServer().get();
+                    // will be replaced by the actual string later
+                    server.createTextChannelBuilder().setName("TEST").create();
+                    interaction.createImmediateResponder().setContent("The text channel was created sucessfuly").respond();
+                }
+                if(interaction.getFullCommandName().equals("addvoicechannel")){
+                    System.out.println(interaction.getUser().getName().toString()+" used add voice channel");
+                    Server server = interaction.getServer().get();
+                    // will be replaced by the actual string later
+                    server.createVoiceChannelBuilder().setName("TEST").create();
+                    interaction.createImmediateResponder().setContent("the Voice channel was created sucessfully").respond();
+                }
             }
 
             // ping command
